@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="60 seconds" debug="false">
+
+    <property name="logPattern" value="[%-5level] %d{yyyy-MM-dd HH:mm:ss} %logger{36} %line - %msg%n"/>
+    <property name="logPath" value="/Users/chenjiali/java/logs"/>
+    <timestamp key="bySecond" datePattern="yyyy-MM-dd"/>
+
+    <appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>${logPattern}</pattern>
+        </encoder>
+    </appender>
+
+    <root level="debug">
+        <appender-ref ref="stdout"/>
+    </root>
+
+</configuration>
