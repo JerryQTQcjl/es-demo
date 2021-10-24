@@ -12,6 +12,8 @@ import lombok.experimental.Accessors;
 public class EsScrollPageQueryBO<T> implements EsBasePageQueryBO<T> {
 
     private T t;
+    private int from;
+    private int size;
     private String scrollId;
     private String scrollTime;
 }

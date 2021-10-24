@@ -1,6 +1,6 @@
 package com.elasticsearch.demo.model.bo.page;
 
-import java.util.Map;
+import java.util.LinkedHashMap;
 
 /**
  * @author jerry chan
@@ -28,7 +28,11 @@ public interface EsBasePageQueryBO<T> {
         throw new UnsupportedOperationException("not support get scrollTime");
     }
 
-    default Map<String, Object> getSearchAfterParam() {
+    default LinkedHashMap<String,String> getSortParam(){
+        throw new UnsupportedOperationException("not support get getSortParam");
+    }
+
+    default LinkedHashMap<String, Object> getSearchAfterParam() {
         throw new UnsupportedOperationException("not support get searchAfterParam");
     }
 }

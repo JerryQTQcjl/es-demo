@@ -1,7 +1,8 @@
 package com.elasticsearch.demo.model.dto;
 
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author jerry chan
@@ -13,17 +14,27 @@ public interface EsBaseSearchDTO<T> {
         throw new UnsupportedOperationException("esBaseSearchDTO unSupport getTotal!");
     }
 
-    List<T> getDataList();
+    default List<T> getDataList() {
+        return new ArrayList<>(0);
+    }
 
     default int getCurPage() {
         throw new UnsupportedOperationException("esBaseSearchDTO unSupport getCurPage!");
+    }
+
+    default int getPageSize() {
+        throw new UnsupportedOperationException("esBaseSearchDTO unSupport getPageSize!");
     }
 
     default String getScrollId() {
         throw new UnsupportedOperationException("esBaseSearchDTO unSupport getScrollId!");
     }
 
-    default Map<String, Object> getSearchAfterParam() {
+    default LinkedHashMap<String, String> getSortParam() {
+        throw new UnsupportedOperationException("esBaseSearchDTO unSupport getSortParam!");
+    }
+
+    default LinkedHashMap<String, Object> getSearchAfterParam() {
         throw new UnsupportedOperationException("esBaseSearchDTO unSupport getSearchAfterParam!");
     }
 }

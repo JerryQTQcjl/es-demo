@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration scan="true" scanPeriod="60 seconds" debug="false">
 
-    <property name="logPattern" value="[%-5level] %d{yyyy-MM-dd HH:mm:ss} %logger{36} %line - %msg%n"/>
+    <property name="logPattern" value="%d{yyyy-MM-dd HH:mm:ss} %-5level %logger{36} %line - %msg%n"/>
     <property name="logPath" value="/Users/chenjiali/java/logs"/>
     <timestamp key="bySecond" datePattern="yyyy-MM-dd"/>
 
@@ -11,7 +11,7 @@
         </encoder>
     </appender>
 
-    <root level="debug">
+    <root level="info">
         <appender-ref ref="stdout"/>
     </root>
 

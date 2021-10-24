@@ -1,7 +1,5 @@
 package com.elasticsearch.demo.exception;
 
-import java.io.IOException;
-
 /**
  * @author jerry chan
  * @date 2021/10/13

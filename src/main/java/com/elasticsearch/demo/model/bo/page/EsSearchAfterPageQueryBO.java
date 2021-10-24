@@ -3,7 +3,7 @@ package com.elasticsearch.demo.model.bo.page;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
-import java.util.Map;
+import java.util.LinkedHashMap;
 
 /**
  * @author jerry chan
@@ -14,5 +14,17 @@ import java.util.Map;
 public class EsSearchAfterPageQueryBO<T> implements EsBasePageQueryBO<T> {
 
     private T t;
-    private Map<String, Object> searchAfterParam;
+    private int size;
+    private LinkedHashMap<String, String> sortParam;
+    private LinkedHashMap<String, Object> searchAfterParam;
+
+    @Override
+    public String getScrollId() {
+        return null;
+    }
+
+    @Override
+    public String getScrollTime() {
+        return null;
+    }
 }

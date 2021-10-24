@@ -12,7 +12,7 @@ import org.elasticsearch.action.update.UpdateRequest;
 public interface EsBaseUpdateBuilder<T extends EsBaseEntity> {
 
     default UpdateRequest buildReq(T t) {
-        return new UpdateRequest().id(StrUtil.toString(t.getId())).doc(BeanUtil.beanToMap(t));
+        return new UpdateRequest().id(StrUtil.toString(t.getId())).doc(BeanUtil.beanToMap(t, false, true));
     }
 
 }

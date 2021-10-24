@@ -1,8 +1,6 @@
 package com.elasticsearch.demo.dao.impl;
 
-import cn.hutool.core.lang.Assert;
 import cn.hutool.core.util.StrUtil;
-import cn.hutool.http.HttpStatus;
 import com.elasticsearch.demo.builder.EsBaseIndexBuilder;
 import com.elasticsearch.demo.builder.EsBaseQueryBuilder;
 import com.elasticsearch.demo.builder.EsBaseScrollBuilder;
@@ -21,14 +19,11 @@ import org.elasticsearch.action.admin.indices.delete.DeleteIndexRequest;
 import org.elasticsearch.action.bulk.BulkRequest;
 import org.elasticsearch.action.bulk.BulkResponse;
 import org.elasticsearch.action.delete.DeleteRequest;
-import org.elasticsearch.action.delete.DeleteResponse;
 import org.elasticsearch.action.index.IndexRequest;
-import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.action.search.SearchScrollRequest;
 import org.elasticsearch.action.update.UpdateRequest;
-import org.elasticsearch.action.update.UpdateResponse;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.client.indices.CreateIndexRequest;
@@ -81,8 +76,12 @@ public abstract class EsBaseDaoImpl<T extends EsBaseEntity> implements EsBaseDao
         SearchRequest searchRequest = new SearchRequest()
                 .indices(getIndexName())
                 .source(queryBuilder.buildReq(queryBO));
-        //scroll
-        Optional.ofNullable(queryBO.getScrollTime()).ifPresent(searchRequest::scroll);
+        try {
+            //scroll
+            Optional.ofNullable(queryBO.getScrollTime()).ifPresent(searchRequest::scroll);
+        } catch (UnsupportedOperationException e) {
+            log.info("not scroll es index [{}], searchRequest: {}", getIndexName(), searchRequest, e);
+        }
         try {
             SearchResponse searchResponse = esClient.search(searchRequest, RequestOptions.DEFAULT);
             return queryBuilder.buildResp(searchResponse);
@@ -100,10 +99,10 @@ public abstract class EsBaseDaoImpl<T extends EsBaseEntity> implements EsBaseDao
         SearchScrollRequest searchScrollRequest = scrollBuilder.buildReq(queryBO);
         try {
             SearchResponse searchResponse = esClient.scroll(searchScrollRequest, RequestOptions.DEFAULT);
-            return queryBuilder.buildResp(searchResponse);
+            return scrollBuilder.buildResp(searchResponse);
         } catch (Exception e) {
             log.error("scroll es index [{}] fail, searchScrollRequest: {}", getIndexName(), searchScrollRequest, e);
-            return queryBuilder.buildResp(e);
+            return scrollBuilder.buildResp(e);
         }
     }
 
@@ -111,8 +110,7 @@ public abstract class EsBaseDaoImpl<T extends EsBaseEntity> implements EsBaseDao
     public void save(EsBaseIndexBuilder<T> indexBuilder, T t) {
         IndexRequest indexRequest = indexBuilder.buildReq(t).index(getIndexName());
         try {
-            IndexResponse indexResponse = esClient.index(indexRequest, RequestOptions.DEFAULT);
-            Assert.isTrue(indexResponse.status().getStatus() == HttpStatus.HTTP_OK, () -> new EsOptException(indexResponse.toString()));
+            esClient.index(indexRequest, RequestOptions.DEFAULT);
         } catch (Exception e) {
             log.error("saveOrUpdate es index [{}] fail, indexRequest: {}", getIndexName(), indexRequest, e);
             throw new EsOptException(e);
@@ -123,8 +121,7 @@ public abstract class EsBaseDaoImpl<T extends EsBaseEntity> implements EsBaseDao
     public void update(EsBaseUpdateBuilder<T> updateBuilder, T t) {
         UpdateRequest updateRequest = updateBuilder.buildReq(t).index(getIndexName());
         try {
-            UpdateResponse updateResponse = esClient.update(updateRequest, RequestOptions.DEFAULT);
-            Assert.isTrue(updateResponse.status().getStatus() == HttpStatus.HTTP_OK, () -> new EsOptException(updateResponse.toString()));
+            esClient.update(updateRequest, RequestOptions.DEFAULT);
         } catch (Exception e) {
             log.error("update es index [{}] fail, updateRequest: {}", getIndexName(), updateRequest, e);
             throw new EsOptException(e);
@@ -135,8 +132,7 @@ public abstract class EsBaseDaoImpl<T extends EsBaseEntity> implements EsBaseDao
     public void deleteIndex(Long id) {
         DeleteRequest deleteRequest = new DeleteRequest().id(StrUtil.toString(id)).index(getIndexName());
         try {
-            DeleteResponse deleteResponse = esClient.delete(deleteRequest, RequestOptions.DEFAULT);
-            Assert.isTrue(deleteResponse.status().getStatus() == HttpStatus.HTTP_OK, () -> new EsOptException(deleteResponse.toString()));
+            esClient.delete(deleteRequest, RequestOptions.DEFAULT);
         } catch (Exception e) {
             log.error("delete es index [{}] fail, deleteRequest: {}", getIndexName(), deleteRequest, e);
             throw new EsOptException(e);

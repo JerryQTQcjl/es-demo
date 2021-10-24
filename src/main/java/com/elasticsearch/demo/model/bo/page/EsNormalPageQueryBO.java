@@ -14,4 +14,14 @@ public class EsNormalPageQueryBO<T> implements EsBasePageQueryBO<T> {
     private T t;
     private int from;
     private int size;
+
+    @Override
+    public String getScrollId() {
+        return null;
+    }
+
+    @Override
+    public String getScrollTime() {
+        return null;
+    }
 }

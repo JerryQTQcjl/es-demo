@@ -7,15 +7,13 @@ import java.util.List;
 
 /**
  * @author jerry chan
- * @date 2021/10/13
+ * @date 2021/10/23
  */
 @Data
 @Accessors(chain = true)
-public class EsPageSearchDTO<T> implements EsBaseSearchDTO<T> {
+public class EsScrollSearchDTO<T> implements EsBaseSearchDTO<T> {
 
-    private int total;
-    private int curPage;
-    public int pageSize;
+    private String scrollTime;
+    private String scrollId;
     private List<T> dataList;
-
 }

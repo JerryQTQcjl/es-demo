@@ -16,10 +16,6 @@ public class EsClueDetailUpdateBuilder implements EsBaseUpdateBuilder<ClueDetail
     private enum Singleton {
         INSTANCE;
 
-        Singleton() {
-            System.out.println("init");
-        }
-
         private EsClueDetailUpdateBuilder esClueDetailUpdateBuilder = new EsClueDetailUpdateBuilder();
     }
 

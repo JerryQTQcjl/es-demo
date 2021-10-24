@@ -3,6 +3,7 @@ package com.elasticsearch.demo.model.entiy;
 import cn.hutool.core.util.StrUtil;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.experimental.Accessors;
 
 import java.util.Date;
 
@@ -12,13 +13,14 @@ import java.util.Date;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
+@Accessors(chain = true)
 public class ClueDetail extends EsBaseEntity {
 
     private static final long serialVersionUID = 678781791133533174L;
     private Long corpId;
     private String name;
     private String phone;
-    private String company = "";
+    private String company;
     private Byte status;
 
     public ClueDetail setCompany(String company) {
